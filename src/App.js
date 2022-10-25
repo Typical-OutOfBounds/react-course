@@ -8,26 +8,23 @@ class App extends Component {
     super();
 
     this.state = {
-      monsters: [
-        {
-          name: 'Linda',
-          id: '423432h'
-        },
-        {
-          name: 'Frank',
-          id: '42632ht'
-        },
-        {
-          name: 'Jacky',
-          id: '4234111'
-        },
-        {
-          name: 'Andrei',
-          id: '4230982h'
-        }
-      ]
-      
-    }
+      monsters: [], // initiliaze as empty for empty case
+    };
+  }
+
+  // lifecycle method
+  // Mounting is the first time a component gets placed on the doc
+  // might remount if it has been unmounted. Basically new instance of it
+  componentDidMount() {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then((response) => response.json()) // if response
+      .then((users) => this.setState(() => {
+        return {monsters: users}
+      },
+      () => {
+        console.log(this.state);
+      }
+      )) // what was returned from response.json is passed to this line
   }
 
   render() {
