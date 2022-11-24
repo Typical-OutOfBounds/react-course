@@ -30,24 +30,31 @@ class App extends Component {
       )) // what was returned from response.json is passed to this line
   }
 
+  // Moving function here so it doesn't keep getting created each time
+  // We never change the function, so we only need to make it once
+  onSearchChange = (event) => {
+    console.log(event.target.value);
+    const searchField = event.target.value.toLowerCase();
+    // if you want to modify an array, you want to generate a new one with the modification
+
+    this.setState(() => {
+      return { searchField }; // Key and value are 'searchField'
+    });
+  }
+
   render() {
     console.log('render');
 
-    const filteredMonsters = this.state.monsters.filter((monster) => {
-      return monster.name.toLowerCase().includes(this.state.searchField);
+    const { monsters, searchField } = this.state;
+    const { onSearchChange } = this // only one function being returned
+
+    const filteredMonsters = monsters.filter((monster) => {
+      return monster.name.toLowerCase().includes(searchField);
     });
 
     return (
       <div className="App">
-        <input className='search-box' type='search' placeholder='search monsters' onChange={(event) => {
-          console.log(event.target.value);
-          const searchField = event.target.value.toLowerCase();
-          // if you want to modify an array, you want to generate a new one with the modification
-
-          this.setState(() => {
-            return { searchField }; // Key and value are 'searchField'
-          });
-        }}/>
+        <input className='search-box' type='search' placeholder='search monsters' onChange={onSearchChange}/>
         {
           filteredMonsters.map((monster) => {
             return(
